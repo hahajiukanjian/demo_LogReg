@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserMapper {
     User queryByUsername(@Param("username") String username);
+
+    void insertUser(User user);
 }

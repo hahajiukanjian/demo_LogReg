@@ -8,4 +8,8 @@
         select * from t_user where username = #{username}
     </select>
 
+    <insert id="insertUser" parameterType="com.hahajiukanjian.Pojo.User">
+        insert into t_user(username, password) values(#{username}, #{password})
+    </insert>
+
 </mapper>

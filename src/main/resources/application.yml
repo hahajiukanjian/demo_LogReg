@@ -4,3 +4,8 @@ spring:
     driverClassName: com.mysql.cj.jdbc.Driver
     username: root
     password: dyt123
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML

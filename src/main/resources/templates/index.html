@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #app {
+            text-align: center;
+            margin-top: -400px;
+            /* 调整垂直居中的位置 */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: black;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .input-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .error {
+            border: 1px solid red;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 12px;
+            position: absolute;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <a @click="showLoginForm">登录</a>  |
+        <a @click="showRegisterForm">注册</a>
+
+        <form v-if="showLogin" method="post" action="/login">
+            <input type="text" v-model="username" name="username" placeholder="账号"><br>
+            <input type="password" v-model="password" name="password" placeholder="密码"><br>
+            <p th:if="${errorMessage}" style="color: red;">[[${errorMessage}]]</p>
+            <button @click="login">登录</button>
+        </form>
+
+        <form v-if="showRegister" method="post" action="/register">
+            <input type="text" v-model="username" name="username" placeholder="账号">
+            <span v-if="username.length > 20" class="error-message">账号长度不能超过20字符</span><br>
+
+            <input type="password" v-model="password" name="password" placeholder="密码" @blur="validatePassword">
+            <span v-if="!isPasswordValid && passwordBlurred" class="error-message">密码必须为6到20位以内的数字和字母的组合</span><br>
+            <input type="password" v-model="confirmPassword" placeholder="确认密码"><br>
+            <button @click="register" :disabled="!isPasswordMatch">注册</button>
+        </form>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showLogin: true,
+                showRegister: false,
+                username: '',
+                password: '',
+                confirmPassword: '',
+                isPasswordValid: true,
+                passwordBlurred: false,
+                isRegister: true
+            },
+            methods: {
+                showLoginForm() {
+                    this.showLogin = true;
+                    this.showRegister = false;
+                },
+                showRegisterForm() {
+                    this.showLogin = false;
+                    this.showRegister = true;
+                },
+                login() {
+                },
+                validatePassword() {
+                    // 校验密码格式
+                    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
+                    this.isPasswordValid = passwordRegex.test(this.password);
+                    this.passwordBlurred = true;
+                },
+                register() {
+                    // 处理注册逻辑
+                    if (this.username.length > 20) {
+                        alert('用户名长度不能超过20字符');
+                        return;
+                    }
+
+                    this.validatePassword();
+                }
+            },
+            computed: {
+                isPasswordMatch() {
+                    return this.password === this.confirmPassword;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
