@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #app {
+            text-align: center;
+            margin-top: -400px;
+            /* 调整垂直居中的位置 */
+        }
+
+        form {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app">
+        <button @click="showLoginForm">登录</button>
+        <button @click="showRegisterForm">注册</button>
+
+        <form v-if="showLogin" method="get" action="/login">
+            <input type="text" v-model="username" name="username" placeholder="用户名"><br>
+            <input type="password" v-model="password" name="password" placeholder="密码"><br>
+            <button @click="login">登录</button>
+        </form>
+
+        <form v-if="showRegister" method="post" action="/register">
+            <input type="text" v-model="username" placeholder="用户名"><br>
+            <input type="password" v-model="password" placeholder="密码"><br>
+            <input type="password" v-model="confirmPassword" placeholder="确认密码"><br>
+            <button @click="register" :disabled="!isPasswordMatch">注册</button>
+        </form>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                showLogin: true,
+                showRegister: false,
+                username: '',
+                password: '',
+                confirmPassword: ''
+            },
+            methods: {
+                showLoginForm() {
+                    this.showLogin = true;
+                    this.showRegister = false;
+                },
+                showRegisterForm() {
+                    this.showLogin = false;
+                    this.showRegister = true;
+                },
+                login() {
+                    // 处理登录逻辑
+                },
+                register() {
+                    // 处理注册逻辑
+                }
+            },
+            computed: {
+                isPasswordMatch() {
+                    return this.password === this.confirmPassword;
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
